@@ -1,8 +1,8 @@
 {
   "name": "journalstate",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Create and manage a state from a bunch of plaintext-like logs.",
-  "main": "parser.js",
+  "main": "lib.js",
   "bin": {
     "journalstate": "main.js"
   },
