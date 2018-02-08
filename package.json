@@ -1,0 +1,15 @@
+{
+  "name": "journalstate",
+  "version": "0.0.1",
+  "description": "Create and manage a state from a bunch of plaintext-like logs.",
+  "main": "parser.js",
+  "bin": {
+    "journalstate": "main.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fecha": "^2.3.2",
+    "yargs": "^11.0.0"
+  }
+}
