@@ -27,8 +27,14 @@ for (let line of parse(fs.readFileSync(inputFile, 'utf-8'))) {
         console.error('ERROR: ' + e.message)
         console.error(`on line ${line.n}: '${line.raw}'`)
         console.error('')
-        console.error(e.stack.split('\n')[2])
+        console.error(
+          e.stack.split('\n')
+            .filter(s => s.indexOf(process.cwd()) !== -1)
+            .join('\n')
+        )
+        process.exitCode = 1
         process.exit()
+        break
       } else {
         console.error(`line ${line.n}: '${line.raw}'`)
         throw e
