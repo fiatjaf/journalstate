@@ -7,10 +7,20 @@ const argv = require('yargs').argv
 const {compute} = require('./main')
 const {init, reducers, end} = require(path.join(process.cwd(), argv.r))
 
-let journal = fs.readFileSync(argv.input || argv.i || argv._[0], 'utf-8')
+let jrnlpath = path.join(process.cwd(), argv.input || argv.i || argv._[0])
+let journal = fs.readFileSync(jrnlpath, 'utf-8')
+
+function include (path) {
+  let abspath = path.join(
+    path.dirname(jrnlpath),
+    path
+  )
+  return fs.readFileSync(abspath, 'utf-8')
+}
 
 let state = compute({
   journal,
+  include,
   init,
   reducers,
   end

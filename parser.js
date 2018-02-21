@@ -3,13 +3,21 @@ const fecha = require('fecha')
 module.exports.parse = parse
 module.exports.parseLine = parseLine
 
-function * parse (body) {
+function * parse (body, include) {
   let lines = body.split('\n')
 
   var lastDate = new Date(0)
   for (let i = 0; i < lines.length; i++) {
     let line = parseLine(lines[i])
     if (!line) continue
+
+    if (line.include) {
+      let includedjrnl = include(line.include)
+      for (let includedline of parse(includedjrnl)) {
+        includedline.n += ` (on ${line.include})`
+        yield includedline
+      }
+    }
 
     if (line.date) {
       lastDate = line.date
@@ -33,11 +41,24 @@ function parseLine (line) {
 
   let [kind, data] = line.split(':')
   if (!data) {
-    return {
-      date: parseDate(line.trim()).toISOString().split('T')[0]
+    // it's probably a date
+    try {
+      return {
+        date: parseDate(line.trim()).toISOString().split('T')[0]
+      }
+    } catch (e) {
+      // it may be something special
+      let [op, param] = line.split(/ +/)
+      switch (op) {
+        case 'include':
+          return {
+            include: param
+          }
+      }
     }
   }
 
+  // it's a normal line, an operation kind with some args and kwargs
   let {args, kwargs} = parseData(data)
 
   return {

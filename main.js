@@ -8,12 +8,15 @@ function compute ({
   init = () => ({}),
   reducers = () => {},
   end = () => {},
-  journal = ''
+  journal = '',
+  include = path => {
+    throw new Error(`cannot include ${path}. no include() function defined.`)
+  }
 }) {
   var state = init()
 
   var prevLine = {date: new Date(0)}
-  for (let line of parse(journal)) {
+  for (let line of parse(journal, include)) {
     if (line.kind) {
       try {
         if (line.date < prevLine.date) {

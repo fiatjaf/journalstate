@@ -82,15 +82,25 @@ buy: melon, 3, vitamin=5, zinc=8
 sell: passionfruit, 1
 eat: passionfruit, 1
 
+include melon-bought.txt
+
 2016-03-01
-eat: melon, 2
 buy: melon
 buy: banana, 7, vitamin=4, protein=3
 
 2016-04-15
 eat: banana, 5
 sell: melon: 1
-    `
+    `,
+
+    include (path) {
+      return path === 'melon-bought.txt'
+        ? `
+2016-03-01
+eat: melon, 2
+        `
+        : ''
+    }
   })
 
   t.deepEqual(state, {
