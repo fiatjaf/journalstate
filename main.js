@@ -47,7 +47,7 @@ end ? end(state) : null
 
 let out = JSON.stringify(state)
 if (argv.output || argv.o) {
-  fs.writeFileSync(out)
+  fs.writeFileSync(argv.output || argv.o, out, {encoding: 'utf-8'})
 } else {
   process.stdout.write(out)
 }
