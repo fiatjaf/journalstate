@@ -6,7 +6,7 @@ const argv = require('yargs').argv
 
 const {StateError} = require('./')
 const {parse} = require('./parser')
-const {init, reducers} = require(path.join(process.cwd(), argv.r))
+const {init, reducers, end} = require(path.join(process.cwd(), argv.r))
 
 let inputFile = argv.input || argv.i || argv._[0]
 
@@ -36,6 +36,8 @@ for (let line of parse(fs.readFileSync(inputFile, 'utf-8'))) {
     }
   }
 }
+
+end ? end(state) : null
 
 let out = JSON.stringify(state)
 if (argv.output || argv.o) {
