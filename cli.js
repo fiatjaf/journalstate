@@ -10,10 +10,10 @@ const {init, reducers, end} = require(path.join(process.cwd(), argv.r))
 let jrnlpath = path.join(process.cwd(), argv.input || argv.i || argv._[0])
 let journal = fs.readFileSync(jrnlpath, 'utf-8')
 
-function include (path) {
+function include (includepath) {
   let abspath = path.join(
     path.dirname(jrnlpath),
-    path
+    includepath
   )
   return fs.readFileSync(abspath, 'utf-8')
 }
