@@ -44,6 +44,8 @@ function compute ({
         }
       }
     }
+
+    prevLine = line
   }
 
   end(state)
