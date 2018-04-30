@@ -25,18 +25,22 @@ function compute ({
         reducers[line.kind](state, line)
       } catch (e) {
         if (e.stateError) {
-          console.error('')
-          console.error('ERROR: ' + e.message)
-          console.error(`on line ${line.n}: '${line.raw}'`)
-          console.error('')
-          console.error(
-            e.stack.split('\n')
-              .filter(s => s.indexOf(process.cwd()) !== -1)
-              .join('\n')
-          )
+          var errorMessage = `
+ERROR: ${e.message}
+on line ${line.n}: '${line.raw}'
+`
           if (process.exit) {
+            console.error(errorMessage)
+            console.error(
+              e.stack.split('\n')
+                .filter(s => s.indexOf(process.cwd()) !== -1)
+                .join('\n')
+            )
             process.exitCode = 1
             process.exit()
+          } else {
+            let err = new Error(errorMessage)
+            err.stack = e.stack
           }
           break
         } else {
