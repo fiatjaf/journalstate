@@ -1,4 +1,3 @@
-
 const {parse} = require('./parser')
 
 module.exports.compute = compute
@@ -35,8 +34,10 @@ function compute ({
               .filter(s => s.indexOf(process.cwd()) !== -1)
               .join('\n')
           )
-          process.exitCode = 1
-          process.exit()
+          if (process.exit) {
+            process.exitCode = 1
+            process.exit()
+          }
           break
         } else {
           console.error(`line ${line.n}: '${line.raw}'`)
