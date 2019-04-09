@@ -1,14 +1,16 @@
+/** @format */
+
 const fecha = require('fecha')
 
 module.exports.parse = parse
 module.exports.parseLine = parseLine
 
-function * parse (body, include) {
+function* parse(body, include) {
   let lines = body.split('\n')
 
   var lastDate = new Date(0)
   for (let i = 0; i < lines.length; i++) {
-    let line = parseLine(lines[i])
+    let line = parseLine(i + 1, lines[i])
     if (!line) continue
 
     if (line.include) {
@@ -30,7 +32,7 @@ function * parse (body, include) {
   }
 }
 
-function parseLine (line) {
+function parseLine(lineno, line) {
   if (line.trim() === '') return null
 
   if (line.trim()[0] === ';') {
@@ -44,7 +46,9 @@ function parseLine (line) {
     // it's probably a date
     try {
       return {
-        date: parseDate(line.trim()).toISOString().split('T')[0]
+        date: parseDate(line.trim())
+          .toISOString()
+          .split('T')[0]
       }
     } catch (e) {
       // it may be something special
@@ -54,6 +58,8 @@ function parseLine (line) {
           return {
             include: param
           }
+        default:
+          throw Error(`line ${lineno}: no useful data on "${line.trim()}".`)
       }
     }
   }
@@ -68,7 +74,7 @@ function parseLine (line) {
   }
 }
 
-function parseDate (d) {
+function parseDate(d) {
   try {
     return fecha.parse(d, 'YYYY-MM-DD')
   } catch (e) {
@@ -80,7 +86,7 @@ function parseDate (d) {
   }
 }
 
-function parseData (d) {
+function parseData(d) {
   var args = []
   var kwargs = {}
 
@@ -100,7 +106,7 @@ function parseData (d) {
   return {args, kwargs}
 }
 
-function convert (v) {
+function convert(v) {
   let n = parseFloat(v)
   if (!isNaN(v)) {
     return n

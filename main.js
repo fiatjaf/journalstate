@@ -22,6 +22,10 @@ function compute ({
           throw StateError(`Line on date ${line.date} appears after ${prevLine.date}.`)
         }
 
+        if (typeof reducers[line.kind] !== 'function') {
+          throw new StateError(`Directive '${line.kind}' doesn't exists.`)
+        }
+
         reducers[line.kind](state, line)
       } catch (e) {
         if (e.stateError) {
